@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbon Footprint Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .calculator {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 300px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 1.5em;
+      color: #333;
+    }
+
+    .display input {
+      width: 90%;
+      padding: 10px;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      text-align: right;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .buttons button {
+      background: #4CAF50;
+      color: white;
+      font-size: 1.2em;
+      padding: 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .buttons button:hover {
+      background: #45a049;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h1>Carbon Footprint Calculator</h1>
+    <div class="display">
+      <input type="text" id="inputDisplay" placeholder="Enter value" readonly>
+    </div>
+    <div class="buttons">
+      <button onclick="appendNumber('1')">1</button>
+      <button onclick="appendNumber('2')">2</button>
+      <button onclick="appendNumber('3')">3</button>
+      <button onclick="appendNumber('C')">C</button>
+      <button onclick="appendNumber('4')">4</button>
+      <button onclick="appendNumber('5')">5</button>
+      <button onclick="appendNumber('6')">6</button>
+      <button onclick="appendNumber('.')">.</button>
+      <button onclick="appendNumber('7')">7</button>
+      <button onclick="appendNumber('8')">8</button>
+      <button onclick="appendNumber('9')">9</button>
+      <button onclick="appendNumber('0')">0</button>
+      <button onclick="setInput('electricity')">Set kWh</button>
+      <button onclick="setInput('miles')">Set Miles</button>
+      <button onclick="calculate()">=</button>
+    </div>
+    <div class="result">
+      <p id="resultDisplay">Electricity (kWh): <span id="electricity">0</span></p>
+      <p>Miles Driven: <span id="miles">0</span></p>
+      <p>Your Carbon Footprint: <span id="footprint">0</span> kg CO₂</p>
+    </div>
+  </div>
+  <script>
+    let currentInput = "";
+    let electricity = 0;
+    let miles = 0;
+
+    // Update the input display
+    function updateDisplay(value) {
+      document.getElementById("inputDisplay").value = value;
+    }
+
+    // Append numbers or clear
+    function appendNumber(number) {
+      if (number === "C") {
+        currentInput = "";
+      } else {
+        currentInput += number;
+      }
+      updateDisplay(currentInput);
+    }
+
+    // Set input for electricity or miles
+    function setInput(type) {
+      if (currentInput === "") return alert("Please enter a value first!");
+
+      if (type === "electricity") {
+        electricity = parseFloat(currentInput);
+        document.getElementById("electricity").textContent = electricity;
+      } else if (type === "miles") {
+        miles = parseFloat(currentInput);
+        document.getElementById("miles").textContent = miles;
+      }
+
+      currentInput = "";
+      updateDisplay("");
+    }
+
+    // Calculate the carbon footprint
+    function calculate() {
+      const electricityFactor = 0.5; // kg CO₂/kWh
+      const milesFactor = 0.25; // kg CO₂/mile
+
+      const electricityEmissions = electricity * electricityFactor;
+      const milesEmissions = miles * milesFactor;
+
+      const totalFootprint = electricityEmissions + milesEmissions;
+      document.getElementById("footprint").textContent = totalFootprint.toFixed(2);
+    }
+  </script>
+</body>
+</html>
